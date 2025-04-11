@@ -13,12 +13,10 @@ function App() {
       if (data?.session) {
         console.log('✅ Session detected:', data.session)
 
-        // Clean URL
         if (window.location.hash) {
           window.history.replaceState(null, null, window.location.pathname)
         }
 
-        // Redirect
         window.location.href = '/dashboard'
       }
     }
@@ -40,7 +38,7 @@ function App() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:3000', // Use https://aibjj.com in prod
+        redirectTo: 'http://localhost:3000', // use https://aibjj.com in production
       },
     })
 
@@ -51,7 +49,8 @@ function App() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>🥋 Welcome to AI BJJ</h1>
+      <h1 style={styles.title}>🥋 BJJ Tracker is Live!</h1>
+      <p>Welcome to your app built with Vite, Supabase, and Vercel.</p>
       <button style={styles.button} onClick={handleGoogleLogin}>
         Sign in with Google
       </button>
@@ -61,18 +60,18 @@ function App() {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
     fontFamily: 'sans-serif',
     background: '#f4f4f4',
+    height: '100vh',
+    paddingTop: '10vh',
+    textAlign: 'center',
   },
   title: {
-    marginBottom: '20px',
+    fontSize: '32px',
+    marginBottom: '10px',
   },
   button: {
+    marginTop: '20px',
     padding: '12px 20px',
     fontSize: '16px',
     cursor: 'pointer',
@@ -80,7 +79,6 @@ const styles = {
     border: 'none',
     backgroundColor: '#2c6ed5',
     color: '#fff',
-    transition: '0.3s',
   },
 }
 
