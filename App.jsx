@@ -26,7 +26,7 @@ function App() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:3000', // or https://aibjj.com in production
+        redirectTo: 'https://aibjj.com', // or https://aibjj.com in production
       },
     })
     if (error) console.error('Login error:', error)
