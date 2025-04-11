@@ -1,3 +1,23 @@
+useEffect(() => {
+  // Check and recover session from URL hash after OAuth redirect
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      console.log('User session recovered:', session)
+      window.location.href = '/dashboard' // ✅ or wherever your logged-in page is
+    }
+  })
+
+  // Optional: Also track ongoing session changes
+  const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      window.location.href = '/dashboard'
+    }
+  })
+
+  return () => {
+    listener?.subscription?.unsubscribe()
+  }
+}, [])
 import React, { useEffect } from 'react'
 import { supabase } from './supabaseClient'
 
