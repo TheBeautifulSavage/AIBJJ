@@ -1,37 +1,24 @@
-useEffect(() => {
-  // Check and recover session from URL hash after OAuth redirect
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      console.log('User session recovered:', session)
-      window.location.href = '/dashboard' // ✅ or wherever your logged-in page is
-    }
-  })
-
-  // Optional: Also track ongoing session changes
-  const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-    if (session) {
-      window.location.href = '/dashboard'
-    }
-  })
-
-  return () => {
-    listener?.subscription?.unsubscribe()
-  }
-}, [])
 import React, { useEffect } from 'react'
 import { supabase } from './supabaseClient'
 
 function App() {
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        console.log('User session:', session)
-        window.location.href = '/dashboard' // change this route if needed
+        console.log('Recovered session:', session)
+        window.history.replaceState(null, null, window.location.pathname) // remove token from URL
+        window.location.href = '/dashboard'
+      }
+    })
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        window.location.href = '/dashboard'
       }
     })
 
     return () => {
-      authListener?.subscription?.unsubscribe()
+      listener?.subscription?.unsubscribe()
     }
   }, [])
 
@@ -39,10 +26,9 @@ function App() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://aibjj.com', // 👈 This must match your live domain!
+        redirectTo: 'http://localhost:3000', // or https://aibjj.com in production
       },
     })
-
     if (error) console.error('Login error:', error)
   }
 
